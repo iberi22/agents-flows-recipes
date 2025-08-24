@@ -1,297 +1,463 @@
 # Contains Studio AI Agents
 
-A comprehensive collection of specialized AI agents designed to accelerate and enhance every aspect of rapid development. Each agent is an expert in their domain, ready to be invoked when their expertise is needed.
+![POML](https://img.shields.io/badge/Microsoft-POML-0078D4?logo=microsoft&logoColor=white)
+![OpenAI GPT-5 Ready](https://img.shields.io/badge/OpenAI-GPT--5-black?logo=openai)
+![Gemini 2.5](https://img.shields.io/badge/Google-Gemini%202.5-4285F4?logo=google)
+![Qwen Code](https://img.shields.io/badge/Alibaba-Qwen%20Code-00A76F?logo=alibabadotcom)
 
-## 📥 Installation
+## Repository manifest (POML)
 
-1. **Download this repository:**
-   ```bash
-   git clone https://github.com/contains-studio/agents.git
-   ```
+ The repo is organized for POML-first agent flows with multi-provider support and benchmarking. This manifest clarifies structure and conventions.
 
-2. **Copy to your Claude Code agents directory:**
-   ```bash
-   cp -r agents/* ~/.claude/agents/
-   ```
-   
-   Or manually copy all the agent files to your `~/.claude/agents/` directory.
+ ```poml
+ <poml>
+   <let name="repo">agents-flows-recipes</let>
+   <let name="version">v0.1</let>
+   <let name="providers">
+     {
+       "openai": { "model": "gpt-5", "temperature": 0.2 },
+       "gemini": { "model": "gemini-2.5-pro", "temperature": 0.2 },
+       "qwen":   { "model": "Qwen2.5-Coder", "temperature": 0.1 }
+     }
+   </let>
+   <let name="layout">
+     {
+       "poml_recipes": "poml/**/{agent}.poml (canonical, multi-provider)",
+       "docs": "docs/* (rules, providers, tools)",
+       "bench": "bench/<task>/cases/*.json (micro-bench)",
+       "scripts": "scripts/* (adapters, bench-run)"
+     }
+   </let>
+   <let name="bench_harness">
+     {
+       "runner": "scripts/bench-run.py",
+       "results_out": "bench/<task>/results/*.json",
+       "lockfile": "recipes.lock.json (pin: sha, date, metrics)"
+     }
+   </let>
+   <let name="prompt_variants">["base","conservative","creative"]</let>
+   <let name="constraints">[
+     "temperatures: 0.0–0.2 for tool-calling/codegen",
+     "shell disabled by default; enable per-recipe",
+     "web.search requires API key (off by default)"
+   ]</let>
+ </poml>
+ ```
 
-3. **Restart Claude Code** to load the new agents.
+## Per-recipe structure (POML, canonical)
 
-## 🚀 Quick Start
+Place recipes under `poml/<department>/<agent>.poml`.
 
-Agents are automatically available in Claude Code. Simply describe your task and the appropriate agent will be triggered. You can also explicitly request an agent by mentioning their name.
+```poml
+<poml>
+  <let name="topology">solo</let>
+  <let name="bench_id">ai-engineer</let>
+  <let name="tool_mode">auto</let>
+  <let name="variant">base</let>
+  <let name="providers">
+    {
+      "openai": { "model": "gpt-5", "temperature": 0.2 },
+      "gemini": { "model": "gemini-2.5-pro", "temperature": 0.2 },
+      "qwen":   { "model": "Qwen2.5-Coder", "temperature": 0.1 }
+    }
+  </let>
+  <let name="tools">["fs.read","fs.write","fs.replace","shell.run","fs.search"]</let>
+  <let name="tool_aliases">{ "fs.read@qwen": "read_file", "shell.run@qwen": "run_shell_command" }</let>
 
-📚 **Learn more:** [Claude Code Sub-Agents Documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
-
-### Example Usage
-- "Create a new app for tracking meditation habits" → `rapid-prototyper`
-- "What's trending on TikTok that we could build?" → `trend-researcher`
-- "Our app reviews are dropping, what's wrong?" → `feedback-synthesizer`
-- "Make this loading screen more fun" → `whimsy-injector`
-
-## 📁 Directory Structure
-
-Agents are organized by department for easy discovery:
-
-```
-contains-studio-agents/
-├── design/
-│   ├── brand-guardian.md
-│   ├── ui-designer.md
-│   ├── ux-researcher.md
-│   ├── visual-storyteller.md
-│   └── whimsy-injector.md
-├── engineering/
-│   ├── ai-engineer.md
-│   ├── backend-architect.md
-│   ├── devops-automator.md
-│   ├── frontend-developer.md
-│   ├── mobile-app-builder.md
-│   ├── rapid-prototyper.md
-│   └── test-writer-fixer.md
-├── marketing/
-│   ├── app-store-optimizer.md
-│   ├── content-creator.md
-│   ├── growth-hacker.md
-│   ├── instagram-curator.md
-│   ├── reddit-community-builder.md
-│   ├── tiktok-strategist.md
-│   └── twitter-engager.md
-├── product/
-│   ├── feedback-synthesizer.md
-│   ├── sprint-prioritizer.md
-│   └── trend-researcher.md
-├── project-management/
-│   ├── experiment-tracker.md
-│   ├── project-shipper.md
-│   └── studio-producer.md
-├── studio-operations/
-│   ├── analytics-reporter.md
-│   ├── finance-tracker.md
-│   ├── infrastructure-maintainer.md
-│   ├── legal-compliance-checker.md
-│   └── support-responder.md
-├── testing/
-│   ├── api-tester.md
-│   ├── performance-benchmarker.md
-│   ├── test-results-analyzer.md
-│   ├── tool-evaluator.md
-│   └── workflow-optimizer.md
-└── bonus/
-    ├── joker.md
-    └── studio-coach.md
+  <role>
+    You are an expert ...
+  </role>
+  <task>
+    Steps / behaviors ...
+  </task>
+  <output-format>
+    - Summary
+    - Plan
+    - Diffs / code
+    - Validation notes
+  </output-format>
+</poml>
 ```
 
-## 📋 Complete Agent List
+ POML is the source of truth. Legacy Markdown agents are optional and only for Claude Code compatibility.
 
-### Engineering Department (`engineering/`)
-- **ai-engineer** - Integrate AI/ML features that actually ship
-- **backend-architect** - Design scalable APIs and server systems
-- **devops-automator** - Deploy continuously without breaking things
-- **frontend-developer** - Build blazing-fast user interfaces
-- **mobile-app-builder** - Create native iOS/Android experiences
-- **rapid-prototyper** - Build MVPs in days, not weeks
-- **test-writer-fixer** - Write tests that catch real bugs
+## Quick Start (POML)
 
-### Product Department (`product/`)
-- **feedback-synthesizer** - Transform complaints into features
-- **sprint-prioritizer** - Ship maximum value in 6 days
-- **trend-researcher** - Identify viral opportunities
+1) Clone the repo
 
-### Marketing Department (`marketing/`)
-- **app-store-optimizer** - Dominate app store search results
-- **content-creator** - Generate content across all platforms
-- **growth-hacker** - Find and exploit viral growth loops
-- **instagram-curator** - Master the visual content game
-- **reddit-community-builder** - Win Reddit without being banned
-- **tiktok-strategist** - Create shareable marketing moments
-- **twitter-engager** - Ride trends to viral engagement
+```bash
+git clone https://github.com/contains-studio/agents-flows-recipes.git
+```
 
-### Design Department (`design/`)
-- **brand-guardian** - Keep visual identity consistent everywhere
-- **ui-designer** - Design interfaces developers can actually build
-- **ux-researcher** - Turn user insights into product improvements
-- **visual-storyteller** - Create visuals that convert and share
-- **whimsy-injector** - Add delight to every interaction
+2) Run a benchmark with a POML recipe
 
-### Project Management (`project-management/`)
-- **experiment-tracker** - Data-driven feature validation
-- **project-shipper** - Launch products that don't crash
-- **studio-producer** - Keep teams shipping, not meeting
+```bash
+python scripts/bench-run.py \
+  --task sample-task \
+  --cases all \
+  --recipe poml/engineering/ai-engineer.poml \
+  --provider openai \
+  --model gpt-5
+```
 
-### Studio Operations (`studio-operations/`)
-- **analytics-reporter** - Turn data into actionable insights
-- **finance-tracker** - Keep the studio profitable
-- **infrastructure-maintainer** - Scale without breaking the bank
-- **legal-compliance-checker** - Stay legal while moving fast
-- **support-responder** - Turn angry users into advocates
+3) Results are written to `bench/<task>/results/*.json`. Pin metrics in `recipes.lock.json` per release.
 
-### Testing & Benchmarking (`testing/`)
-- **api-tester** - Ensure APIs work under pressure
-- **performance-benchmarker** - Make everything faster
-- **test-results-analyzer** - Find patterns in test failures
-- **tool-evaluator** - Choose tools that actually help
-- **workflow-optimizer** - Eliminate workflow bottlenecks
+### Migration: Convert Markdown to POML
 
-## 🎁 Bonus Agents
-- **studio-coach** - Rally the AI troops to excellence
-- **joker** - Lighten the mood with tech humor
+Use the helper script to migrate legacy Markdown recipes into canonical POML files under `poml/<department>/`.
 
-## 🎯 Proactive Agents
+```bash
+python scripts/convert_md_to_poml.py \
+  --departments design marketing product project-management studio-operations testing bonus \
+  --src-root . \
+  --dst-root poml
+```
+
+- Add `--force` to overwrite existing `.poml` files.
+- After migration, update lists to reference `poml/**`. Benchmarks should point `--recipe` to the generated `.poml`.
+
+## Directory Structure
+
+POML-first layout:
+
+```text
+agents-flows-recipes/
+├── poml/
+│   └── engineering/
+│       ├── ai-engineer.poml
+│       ├── backend-architect.poml
+│       ├── devops-automator.poml
+│       ├── frontend-developer.poml
+│       ├── mobile-app-builder.poml
+│       ├── rapid-prototyper.poml
+│       └── test-writer-fixer.poml
+├── bench/
+│   ├── ai-engineer/
+│   │   └── cases/*.json
+│   └── sample-task/
+│       └── cases/*.json
+├── scripts/
+│   └── bench-run.py
+├── docs/
+│   └── qwen-rules.md
+└── recipes.lock.json
+```
+
+## Complete Agent List
+
+### Engineering Department (`poml/engineering/`)
+
+- ai-engineer.poml
+- backend-architect.poml
+- devops-automator.poml
+- frontend-developer.poml
+- mobile-app-builder.poml
+- rapid-prototyper.poml
+- test-writer-fixer.poml
+
+### Product Department (`poml/product/`)
+
+- feedback-synthesizer.poml
+- sprint-prioritizer.poml
+- trend-researcher.poml
+
+### Marketing Department (`poml/marketing/`)
+
+- app-store-optimizer.poml
+- content-creator.poml
+- growth-hacker.poml
+- instagram-curator.poml
+- reddit-community-builder.poml
+- tiktok-strategist.poml
+- twitter-engager.poml
+
+### Design Department (`poml/design/`)
+
+- brand-guardian.poml
+- ui-designer.poml
+- ux-researcher.poml
+- visual-storyteller.poml
+- whimsy-injector.poml
+
+### Project Management (`poml/project-management/`)
+
+- experiment-tracker.poml
+- project-shipper.poml
+- studio-producer.poml
+
+### Studio Operations (`poml/studio-operations/`)
+
+- analytics-reporter.poml
+- finance-tracker.poml
+- infrastructure-maintainer.poml
+- legal-compliance-checker.poml
+- support-responder.poml
+
+### Testing & Benchmarking (`poml/testing/`)
+
+- api-tester.poml
+- performance-benchmarker.poml
+- test-results-analyzer.poml
+- tool-evaluator.poml
+- workflow-optimizer.poml
+
+## Bonus Agents (`poml/bonus/`)
+
+- studio-coach.poml
+- joker.poml
+
+## Proactive Agents
 
 Some agents trigger automatically in specific contexts:
+
 - **studio-coach** - When complex multi-agent tasks begin or agents need guidance
 - **test-writer-fixer** - After implementing features, fixing bugs, or modifying code
 - **whimsy-injector** - After UI/UX changes
 - **experiment-tracker** - When feature flags are added
 
-## 💡 Best Practices
+## Best Practices
 
 1. **Let agents work together** - Many tasks benefit from multiple agents
 2. **Be specific** - Clear task descriptions help agents perform better
 3. **Trust the expertise** - Agents are designed for their specific domains
 4. **Iterate quickly** - Agents support the 6-day sprint philosophy
 
-## 🔧 Technical Details
+## Technical Details
 
-### Agent Structure
-Each agent includes:
-- **name**: Unique identifier
-- **description**: When to use the agent with examples
-- **color**: Visual identification
-- **tools**: Specific tools the agent can access
-- **System prompt**: Detailed expertise and instructions
+### Agent Structure (POML)
 
-### Adding New Agents
-1. Create a new `.md` file in the appropriate department folder
-2. Follow the existing format with YAML frontmatter
-3. Include 3-4 detailed usage examples
-4. Write comprehensive system prompt (500+ words)
-5. Test the agent with real tasks
+Each agent includes in `.poml`:
 
-## 📊 Agent Performance
+- **let: topology, bench_id, tool_mode, providers, tools, tool_aliases**
+- **role**: expertise and identity
+- **task**: steps/behaviors and constraints
+- **output-format**: response structure
+- **stylesheet** (optional): tone, verbosity, bullets
+
+### Adding New Agents (POML)
+
+1) Create `poml/<department>/<agent>.poml`
+2) Define `<let>` blocks for providers/tools/topology/bench_id
+3) Add `<role>`, `<task>`, `<output-format>`
+4) Validate by running `bench-run.py` with a sample bench task
+5) Optionally add provider-specific `tool_aliases` (e.g., Qwen)
+
+## Roadmap
+
+- **Headers per recipe (POML `<let>`):**
+  - `topology` (`solo` | `multi`), `bench_id`, `variant`/`variants`, `tools`, `tool_aliases`, `providers`.
+  - Recommended extras: `constraints` (list), `prompt_variants` (map of variant → brief intent).
+- **Micro-bench layout:**
+  - `bench/<task>/cases/*.json` with fields: `id`, `input`, `checks.contains`.
+  - Results: `bench/<task>/results/results_<timestamp>.json`.
+- **Bench harness (`scripts/bench-run.py`):**
+  - Dry-run friendly. Parses `.poml` `<let>` and legacy `.md` frontmatter.
+  - Example: `python scripts/bench-run.py --task sample-task --cases all --recipe poml/engineering/ai-engineer.poml --provider openai --model gpt-5`.
+- **Lockfile (`recipes.lock.json`):**
+  - Pin `release.sha` and `release.date` plus `metrics[bench_id][provider][model].variants[*]` with `accuracy`, `avg_latency_ms`, `tool_calls`.
+  - Update flow: run bench → copy metrics → bump date (local: 2025-08-24) and current `git rev-parse HEAD`.
+- **Multi-provider variants:**
+  - OpenAI: `gpt-5`
+  - Gemini: `gemini-2.5-pro`, `gemini-2.5-flash` (planned)
+  - Qwen: `Qwen2.5-Coder`
+  - Use `<let name="providers">{ ... }</let>` to override per provider (e.g., temperature, model).
+- **Temperature guidance:**
+  - Deterministic/code: 0.1–0.3 (default `0.2`).
+  - Ideation/creative: 0.6–0.8 (e.g., set `variant=creative`).
+- **Hybrid template approach:**
+  - Keep a unified base POML template with canonical tools and roles.
+  - Layer provider-specific overrides in `providers` and `tool_aliases`.
+  - For specialized behaviors, define `variants` (e.g., `base`, `creative`, `fast`) and select via CLI `--variants` or `<let name="variant">`.
+
+## Agent Performance
 
 Track agent effectiveness through:
+
 - Task completion time
 - User satisfaction
 - Error rates
 - Feature adoption
 - Development velocity
 
-## 🚦 Status
+## Status
 
-- ✅ **Active**: Fully functional and tested
-- 🚧 **Coming Soon**: In development
-- 🧪 **Beta**: Testing with limited functionality
+- **Active**: Fully functional and tested
+- **Coming Soon**: In development
+- **Beta**: Testing with limited functionality
 
-## 🛠️ Customizing Agents for Your Studio
+## Customizing Agents for Your Studio
 
 ### Agent Customization Todo List
 
 Use this checklist when creating or modifying agents for your specific needs:
 
-#### 📋 Required Components
-- [ ] **YAML Frontmatter**
-  - [ ] `name`: Unique agent identifier (kebab-case)
-  - [ ] `description`: When to use + 3-4 detailed examples with context/commentary
-  - [ ] `color`: Visual identification (e.g., blue, green, purple, indigo)
-  - [ ] `tools`: Specific tools the agent can access (Write, Read, MultiEdit, Bash, etc.)
+#### Required Components
 
-#### 📝 System Prompt Requirements (500+ words)
-- [ ] **Agent Identity**: Clear role definition and expertise area
-- [ ] **Core Responsibilities**: 5-8 specific primary duties
-- [ ] **Domain Expertise**: Technical skills and knowledge areas
-- [ ] **Studio Integration**: How agent fits into 6-day sprint workflow
-- [ ] **Best Practices**: Specific methodologies and approaches
-- [ ] **Constraints**: What the agent should/shouldn't do
-- [ ] **Success Metrics**: How to measure agent effectiveness
+- **YAML Frontmatter**
+  - **name**: Unique agent identifier (kebab-case)
+  - **description**: When to use + 3-4 detailed examples with context/commentary
+  - **color**: Visual identification (e.g., blue, green, purple, indigo)
+  - **tools**: Specific tools the agent can access (Write, Read, MultiEdit, Bash, etc.)
+- **tools**: Specific tools the agent can access (fs.read, fs.write, fs.replace, shell.run, fs.search, web.fetch)
 
-#### 🎯 Required Examples by Agent Type
+#### System Prompt Requirements (500+ words)
+
+- **Agent Identity**: Clear role definition and expertise area
+- **Core Responsibilities**: 5-8 specific primary duties
+- **Domain Expertise**: Technical skills and knowledge areas
+- **Studio Integration**: How agent fits into 6-day sprint workflow
+- **Best Practices**: Specific methodologies and approaches
+- **Constraints**: What the agent should/shouldn't do
+- **Success Metrics**: How to measure agent effectiveness
+
+#### Required Examples by Agent Type
 
 **Engineering Agents** need examples for:
-- [ ] Feature implementation requests
-- [ ] Bug fixing scenarios
-- [ ] Code refactoring tasks
-- [ ] Architecture decisions
+
+- Feature implementation requests
+- Bug fixing scenarios
+- Code refactoring tasks
+- Architecture decisions
 
 **Design Agents** need examples for:
-- [ ] New UI component creation
-- [ ] Design system work
-- [ ] User experience problems
-- [ ] Visual identity tasks
+
+- New UI component creation
+- Design system work
+- User experience problems
+- Visual identity tasks
 
 **Marketing Agents** need examples for:
-- [ ] Campaign creation requests
-- [ ] Platform-specific content needs
-- [ ] Growth opportunity identification
-- [ ] Brand positioning tasks
+
+- Campaign creation requests
+- Platform-specific content needs
+- Growth opportunity identification
+- Brand positioning tasks
 
 **Product Agents** need examples for:
-- [ ] Feature prioritization decisions
-- [ ] User feedback analysis
-- [ ] Market research requests
-- [ ] Strategic planning needs
+
+- Feature prioritization decisions
+- User feedback analysis
+- Market research requests
+- Strategic planning needs
 
 **Operations Agents** need examples for:
-- [ ] Process optimization
-- [ ] Tool evaluation
-- [ ] Resource management
-- [ ] Performance analysis
 
-#### ✅ Testing & Validation Checklist
-- [ ] **Trigger Testing**: Agent activates correctly for intended use cases
-- [ ] **Tool Access**: Agent can use all specified tools properly
-- [ ] **Output Quality**: Responses are helpful and actionable
-- [ ] **Edge Cases**: Agent handles unexpected or complex scenarios
-- [ ] **Integration**: Works well with other agents in multi-agent workflows
-- [ ] **Performance**: Completes tasks within reasonable timeframes
-- [ ] **Documentation**: Examples accurately reflect real usage patterns
+- Process optimization
+- Tool evaluation
+- Resource management
+- Performance analysis
 
-#### 🔧 Agent File Structure Template
+#### Testing & Validation Checklist
 
-```markdown
----
-name: your-agent-name
-description: Use this agent when [scenario]. This agent specializes in [expertise]. Examples:\n\n<example>\nContext: [situation]\nuser: "[user request]"\nassistant: "[response approach]"\n<commentary>\n[why this example matters]\n</commentary>\n</example>\n\n[3 more examples...]
-color: agent-color
-tools: Tool1, Tool2, Tool3
----
+- **Trigger Testing**: Agent activates correctly for intended use cases
+- **Tool Access**: Agent can use all specified tools properly
+- **Output Quality**: Responses are helpful and actionable
+- **Edge Cases**: Agent handles unexpected or complex scenarios
+- **Integration**: Works well with other agents in multi-agent workflows
+- **Performance**: Completes tasks within reasonable timeframes
+- **Documentation**: Examples accurately reflect real usage patterns
 
-You are a [role] who [primary function]. Your expertise spans [domains]. You understand that in 6-day sprints, [sprint constraint], so you [approach].
+#### Agent File Structure Template (POML)
 
-Your primary responsibilities:
-1. [Responsibility 1]
-2. [Responsibility 2]
-...
+```poml
+<poml>
+  <let name="topology">solo</let>
+  <let name="bench_id">your-task-id</let>
+  <let name="tool_mode">auto</let>
+  <let name="providers">{ "openai": {"model":"gpt-5","temperature":0.2} }</let>
+  <let name="tools">["fs.read","fs.write","fs.replace","shell.run","fs.search"]</let>
+  <let name="tool_aliases">{}</let>
 
-[Detailed system prompt content...]
-
-Your goal is to [ultimate objective]. You [key behavior traits]. Remember: [key philosophy for 6-day sprints].
+  <role>
+    You are a [role] who [primary function]...
+  </role>
+  <task>
+    - Plan → Act → Verify
+    - Prefer tool-first actions (fs.search/read before edits)
+  </task>
+  <output-format>
+    - Summary
+    - Plan
+    - Diffs / code
+    - Validation
+  </output-format>
+</poml>
 ```
 
-#### 📂 Department-Specific Guidelines
+#### Department-Specific Guidelines
 
 **Engineering** (`engineering/`): Focus on implementation speed, code quality, testing
-**Design** (`design/`): Emphasize user experience, visual consistency, rapid iteration  
+**Design** (`design/`): Emphasize user experience, visual consistency, rapid iteration
 **Marketing** (`marketing/`): Target viral potential, platform expertise, growth metrics
-**Product** (`product/`): Prioritize user value, data-driven decisions, market fit
-**Operations** (`studio-operations/`): Optimize processes, reduce friction, scale systems
-**Testing** (`testing/`): Ensure quality, find bottlenecks, validate performance
-**Project Management** (`project-management/`): Coordinate teams, ship on time, manage scope
 
-#### 🎨 Customizations
+### Script `bench-run`
 
-Modify these elements for your needs:
-- [ ] Adjust examples to reflect your product types
-- [ ] Add specific tools agents have access to
-- [ ] Modify success metrics for your KPIs
-- [ ] Update department structure if needed
-- [ ] Customize agent colors for your brand
+- Ejecuta una receta POML sobre `bench/<task>` y escribe métricas: `bench/<task>/results/<timestamp>.json`.
+- Parámetros: `--recipe poml/.../*.poml --provider <openai|gemini|qwen> --model <...> --variants v1,v2 --cases all|id`.
+- Para recetas `.md` (legacy), se valida YAML contra esquema; para `.poml` se hace validación mínima de `<let>`.
+- Salida resumida + detalle por caso.
 
-## 🤝 Contributing
+### `recipes.lock.json`
+
+- Por release, fijar:
+  - **sha**: commit de recetas.
+  - **date**: fecha de publicación.
+  - **metrics**: resumen por receta/variante (aciertos, latencia media, costo aprox.).
+- Permite reproducibilidad y comparación entre releases.
+
+### Versiones por LLM con herramientas nativas
+
+- **OpenAI (GPT‑5 / Responses API)**
+  - Usar Function/Tool Calling con `tools` (JSON Schema) y `tool_choice`.
+  - Recomendado: `tool_mode=auto` para orquestación general; `required` cuando se exige llamada a una función.
+  - Docs: Function calling (OpenAI).
+- **Gemini 2.5 Pro y 2.5 Flash**
+  - Usar `function_calling_config: AUTO | ANY | NONE` y `allowed_function_names` cuando se quiera restringir.
+  - Soporta uso combinado de herramientas nativas y funciones de usuario; evaluar `AUTO` por defecto.
+  - Docs: Function calling con Gemini.
+- **Qwen / QwenCoder**
+  - Usar configuración de llamadas a herramientas/funciones análoga ("tool calling").
+  - Mapeo sugerido: `tool_mode` -> { auto | required | none } (adapter `scripts/adapters/qwencoder.py`).
+  - Alias de herramientas vía `tool_aliases` con sufijo `@qwen` cuando difiere el nombre.
+  - Docs: [Qwen Code tools overview](https://github.com/QwenLM/qwen-code/blob/main/docs/tools/index.md)
+
+### Temperaturas recomendadas
+
+- **Planificación/razonamiento estructurado**: 0.0–0.3
+- **Generación de código / tool‑calling estricto**: 0.0–0.2 (mejor adherencia a esquemas)
+- **Ideación creativa / contenido largo**: 0.6–0.8 (subir si se busca diversidad)
+- Referencia general: PromptingGuide – LLM Settings.
+
+### Plantilla unificada vs. especializada por LLM
+
+- **Unificada (recomendada)**:
+  - Pros: menos archivos, portabilidad; se parametriza `provider`, `model`, `tool_mode`, `tool_aliases`.
+  - Contras: cierta complejidad de mapeos por proveedor.
+- **Especializada por LLM**:
+  - Pros: ajustes finos y documentación dedicada.
+  - Contras: duplicación de contenido y mantenimiento mayor.
+- **Estrategia híbrida**: plantilla base + overrides por proveedor vía YAML (alias de herramientas, `tool_mode`, `temperature`).
+
+### Roadmap (POML‑first)
+
+- Migración completa a `.poml` para todas las carpetas (design, marketing, product, etc.).
+- Extender benchmarks (`bench/<task>/cases/*.json`) por agente y departamento.
+- Ejecutar `bench-run.py` y consolidar métricas en `recipes.lock.json` por release (sha, date, provider/model, variantes, accuracy, latencia).
+- Añadir variantes multi‑proveedor (OpenAI/Gemini/Qwen) y alias de herramientas por proveedor donde aplique.
+- Documentar adapters por proveedor si se agregan.
+
+Referencias:
+
+- OpenAI: [Function calling](https://platform.openai.com/docs/guides/function-calling)
+- Gemini: [Function calling](https://ai.google.dev/gemini-api/docs/function-calling)
+- LLM Settings (temperatura): [PromptingGuide – LLM Settings](https://www.promptingguide.ai/introduction/settings)
+- Qwen/QwenCoder: [Tools and function calling](https://github.com/QwenLM/qwen-code/tree/main/docs/tools)
+- Qwen (local): [Qwen tools (local)](docs/qwen-tools.md), [Qwen rules (local)](docs/qwen-rules.md)
+
+## Contributing
 
 To improve existing agents or suggest new ones:
+
 1. Use the customization checklist above
 2. Test thoroughly with real projects
 3. Document performance improvements

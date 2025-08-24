@@ -1,0 +1,17 @@
+{
+  "name": "agents-flows-recipes",
+  "private": true,
+  "version": "0.1.0",
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "markdownlint-cli": "^0.41.0"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.md": "markdownlint",
+    "poml/**/*.poml": "python scripts/check_poml_headers.py --"
+  }
+}

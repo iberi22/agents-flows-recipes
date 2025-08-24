@@ -12,3 +12,33 @@ Thumbs.db
 # IDE files
 .vscode/
 .idea/
+
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+.env.*
+.python-version
+
+# Logs and temp
+*.log
+*.tmp
+
+# Bench harness outputs (keep cases and metrics tracked)
+# Only ignore result files, not directories, to allow .gitkeep if needed
+bench/**/results/*.json
+bench/**/results/*.csv
+
+# Converter output scratch
+poml_out/
+
+# Node project dependencies
+node_modules/

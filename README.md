@@ -1,9 +1,10 @@
-# Contains Studio AI Agents
+# agents-flows-recipes
 
 ![POML](https://img.shields.io/badge/Microsoft-POML-0078D4?logo=microsoft&logoColor=white)
 ![OpenAI GPT-5 Ready](https://img.shields.io/badge/OpenAI-GPT--5-black?logo=openai)
 ![Gemini 2.5](https://img.shields.io/badge/Google-Gemini%202.5-4285F4?logo=google)
 ![Qwen Code](https://img.shields.io/badge/Alibaba-Qwen%20Code-00A76F?logo=alibabadotcom)
+[![BMAD-METHOD](https://img.shields.io/badge/BMAD--METHOD-Repo-6f42c1?logo=github)](https://github.com/bmad-code-org/BMAD-METHOD)
 
 ## Repository manifest (POML)
 
@@ -468,6 +469,67 @@ Referencias:
 - LLM Settings (temperatura): [PromptingGuide – LLM Settings](https://www.promptingguide.ai/introduction/settings)
 - Qwen/QwenCoder: [Tools and function calling](https://github.com/QwenLM/qwen-code/tree/main/docs/tools)
 - Qwen (local): [Qwen tools (local)](docs/qwen-tools.md), [Qwen rules (local)](docs/qwen-rules.md)
+
+## BMAD‑aligned: Lógicas extraídas e integradas
+
+- Separación estricta de roles (`planificación` vs `desarrollo`):
+  reflejada en recetas POML con `topology` y roles claros en `<role>` y
+  pasos en `<task>`.
+- Sharding de documentación (PRD/Arquitectura/Historias):
+  - `docs/prd/` y `docs/architecture/` (p. ej.,
+    `coding-standards.md`, `tech-stack.md`, `source-tree.md`).
+  - `docs/stories/` con `docs/templates/story-tmpl.yaml` y checklist
+    `docs/checklists/story-draft-checklist.md`.
+- Flujos ejecutables y checklists: workflow
+  `.windsurf/workflows/create-next-story.md` guía pasos secuenciales para
+  crear la siguiente historia.
+- Elicitación estructurada (iteración + validación): se fomenta en
+  `<task>` y en el formato de salida con secciones de plan/validación.
+- Configuración centralizada: `docs/core-config.yaml` como fuente común
+  para reglas, providers y convenciones.
+- Herramientas canónicas y mapeos por proveedor: uso de
+  `fs.read/write/replace/search`, `shell.run`, `web.fetch` y `tool_aliases`
+  por proveedor (p. ej., `@qwen`).
+- Bench reproducible: harness `scripts/bench-run.py`, casos en
+  `bench/<task>/cases/*.json` y pin de métricas en `recipes.lock.json`.
+- Validación de headers POML: `scripts/check_poml_headers.py` exige
+  `<let>` mínimos (`topology`, `bench_id`, `tools`, `providers`).
+
+## Cambios recientes (2025-08-24)
+
+- **Husky + lint-staged**
+  - Hook: `.husky/pre-commit` ejecuta `npx lint-staged`.
+  - Config en `package.json`:
+    - `*.md` → `markdownlint`
+    - `poml/**/*.poml` → `python scripts/check_poml_headers.py --`
+- **Markdownlint**: `.markdownlint.json` con MD013 (120), MD041 nivel 1,
+  MD033/MD034 desactivadas.
+- **Validador de headers POML**: `scripts/check_poml_headers.py` (revisa
+  `<let>` requeridos por receta).
+- **CI (GitHub Actions)**: `.github/workflows/ci.yml`
+  - `lint-markdown` (Node 20)
+  - `validate-poml-headers` (Python 3.11)
+  - `bench-smoke` para `poml/engineering/ai-engineer.poml` y
+    `poml/marketing/content-creator.poml`
+- **Normalización de finales de línea**: `.gitattributes` fuerza `eol=lf`
+  para textos y `.husky/*` (evita fallos en hooks en Windows).
+- **Ignorar artefactos**: `.gitignore` cubre `node_modules/`, caches de
+  Python, y salidas de bench (`bench/**/results/*.json`,
+  `bench/**/metrics/*.csv`).
+- **Plantillas y técnicas avanzadas**
+  - Plantilla POML multi‑proveedor: `docs/poml-template.poml`.
+  - Técnicas avanzadas: `docs/advanced-techniques.md` (multi‑agente,
+    ToolTrain, gist de system prompt).
+- **Documentación BMAD añadida**
+  - `docs/prd/`, `docs/architecture/`, `docs/stories/`,
+    `docs/templates/story-tmpl.yaml`,
+    `docs/checklists/story-draft-checklist.md`.
+  - Workflow: `.windsurf/workflows/create-next-story.md`.
+
+### Notas de entorno
+
+- Windows: asegúrate de tener `python` en PATH para lint‑staged; si solo tienes `py`, puedes usar `py -3 scripts/check_poml_headers.py --`.
+- Si cambiaste finales de línea a CRLF, ejecuta `git add --renormalize .` tras aplicar `.gitattributes`.
 
 ## Contributing
 

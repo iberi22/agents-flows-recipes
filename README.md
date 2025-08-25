@@ -269,6 +269,21 @@ Each agent includes in `.poml`:
   - Layer provider-specific overrides in `providers` and `tool_aliases`.
   - For specialized behaviors, define `variants` (e.g., `base`, `creative`, `fast`) and select via CLI `--variants` or `<let name="variant">`.
 
+## CI y Pre-commit
+
+- **Husky + lint-staged (local):**
+  - `npm install --no-fund --no-audit`
+  - En cada commit se ejecuta:
+    - `markdownlint` sobre `*.md`
+    - `scripts/check_poml_headers.py` sobre `poml/**/*.poml`
+- **CI (GitHub Actions):**
+  - Lint de Markdown (Node 20)
+  - Validación de headers POML (Python 3.11)
+  - Smoke benches (dry-run):
+    - `poml/engineering/ai-engineer.poml`
+    - `poml/marketing/content-creator.poml`
+- **Plantilla POML multi-proveedor:** `docs/poml-template.poml`
+
 ## Agent Performance
 
 Track agent effectiveness through:

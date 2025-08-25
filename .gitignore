@@ -36,6 +36,7 @@ venv/
 # Only ignore result files, not directories, to allow .gitkeep if needed
 bench/**/results/*.json
 bench/**/results/*.csv
+bench/**/metrics/*.csv
 
 # Converter output scratch
 poml_out/

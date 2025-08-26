@@ -81,6 +81,7 @@ Place recipes under `poml/<department>/<agent>.poml`.
 ```
 
  POML is the source of truth. Legacy Markdown agents are optional and only for Claude Code compatibility.
+Markdown content is considered legacy and is not linted nor enforced in CI/CD anymore; only POML recipes are validated.
 
 ## Quick Start (POML)
 
@@ -275,13 +276,13 @@ Each agent includes in `.poml`:
 
 - **Husky + lint-staged (local):**
   - `npm install --no-fund --no-audit`
-  - En cada commit se ejecuta:
-    - `markdownlint` sobre `*.md`
+  - En cada commit se valida SOLO POML:
     - `scripts/check_poml_headers.py` sobre `poml/**/*.poml`
+- **Pre-push (Husky):**
+  - Valida headers POML en todos los `.poml` del repo.
 - **CI (GitHub Actions):**
-  - Lint de Markdown (Node 20)
   - Validación de headers POML (Python 3.11)
-  - Smoke benches (dry-run):
+  - Smoke benches (dry-run) con recetas POML:
     - `poml/engineering/ai-engineer.poml`
     - `poml/marketing/content-creator.poml`
 - **Plantilla POML multi-proveedor:** `docs/poml-template.poml`
@@ -496,36 +497,23 @@ Referencias:
 - Validación de headers POML: `scripts/check_poml_headers.py` exige
   `<let>` mínimos (`topology`, `bench_id`, `tools`, `providers`).
 
-## Cambios recientes (2025-08-24)
+## Cambios recientes (2025-08-26)
 
 - **Husky + lint-staged**
-  - Hook: `.husky/pre-commit` ejecuta `npx lint-staged`.
-  - Config en `package.json`:
-    - `*.md` → `markdownlint`
-    - `poml/**/*.poml` → `python scripts/check_poml_headers.py --`
-- **Markdownlint**: `.markdownlint.json` con MD013 (120), MD041 nivel 1,
-  MD033/MD034 desactivadas.
-- **Validador de headers POML**: `scripts/check_poml_headers.py` (revisa
-  `<let>` requeridos por receta).
+  - `.husky/pre-commit` ejecuta `npx lint-staged` (solo POML via `scripts/check_poml_headers.py`).
+  - `.husky/pre-push` valida headers POML repo‑wide.
+- **Markdownlint**
+  - Deprecado. Configuración y checks eliminados del repo/CI.
+- **Validador de headers POML**: `scripts/check_poml_headers.py` (revisa `<let>` requeridos).
 - **CI (GitHub Actions)**: `.github/workflows/ci.yml`
-  - `lint-markdown` (Node 20)
-  - `validate-poml-headers` (Python 3.11)
-  - `bench-smoke` para `poml/engineering/ai-engineer.poml` y
-    `poml/marketing/content-creator.poml`
-- **Normalización de finales de línea**: `.gitattributes` fuerza `eol=lf`
-  para textos y `.husky/*` (evita fallos en hooks en Windows).
-- **Ignorar artefactos**: `.gitignore` cubre `node_modules/`, caches de
-  Python, y salidas de bench (`bench/**/results/*.json`,
-  `bench/**/metrics/*.csv`).
+  - Eliminado el job de lint de Markdown.
+  - Se mantiene `validate-poml-headers` y `bench-smoke` para recetas POML.
+- **Normalización de finales de línea**: `.gitattributes` mantiene `eol=lf` para textos y `.husky/*`.
+- **Ignorar artefactos**: `.gitignore` cubre `node_modules/`, caches de Python y salidas de bench (`bench/**/results/*.json`, `bench/**/metrics/*.csv`).
 - **Plantillas y técnicas avanzadas**
   - Plantilla POML multi‑proveedor: `docs/poml-template.poml`.
-  - Técnicas avanzadas: `docs/advanced-techniques.md` (multi‑agente,
-    ToolTrain, gist de system prompt).
-- **Documentación BMAD añadida**
-  - `docs/prd/`, `docs/architecture/`, `docs/stories/`,
-    `docs/templates/story-tmpl.yaml`,
-    `docs/checklists/story-draft-checklist.md`.
-  - Workflow: `.windsurf/workflows/create-next-story.md`.
+  - Técnicas avanzadas: `docs/advanced-techniques.md`.
+- **Documentación BMAD**: PRD/Arquitectura/Historias y workflow `.windsurf/workflows/create-next-story.md`.
 
 ### Notas de entorno
 

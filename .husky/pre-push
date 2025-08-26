@@ -1,11 +1,13 @@
 #!/usr/bin/env sh
 
-# Run repository-wide Markdown checks before pushing
-npx --yes markdownlint $(git ls-files '*.md') || exit 1
+set -e
 
-files=$(git ls-files '*.md' | tr '\n' ' ')
+# Validate POML headers repo-wide before pushing
+files="$(git ls-files 'poml/**/*.poml' | tr '\n' ' ' || true)"
 if [ -n "$files" ]; then
-  for f in $files; do
-    npx --yes markdown-link-check -q -c .mlc.config.json "$f" || exit 1
-  done
+  python scripts/check_poml_headers.py -- $files
+else
+  echo "No POML files found"
 fi
+
+exit 0

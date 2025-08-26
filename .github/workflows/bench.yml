@@ -24,7 +24,7 @@ jobs:
 
       - name: Run bench-run (sample)
         run: |
-          python scripts/bench-run.py --task sample-task --cases all --recipe engineering/sample-recipe.md --provider openai --model gpt-5
+          python scripts/bench-run.py --task sample-task --cases all --recipe poml/engineering/ai-engineer.poml --provider openai --model gpt-5
 
       - name: Upload bench results
         uses: actions/upload-artifact@v4

@@ -4,21 +4,12 @@
   "version": "0.1.0",
   "devDependencies": {
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.7",
-    "markdownlint-cli": "^0.41.0",
-    "markdown-link-check": "^3.11.2"
+    "lint-staged": "^15.2.7"
   },
   "scripts": {
-    "prepare": "husky",
-    "lint:md": "markdownlint \"**/*.md\"",
-    "lint:links": "node -e \"const { execSync } = require('node:child_process'); const files = execSync('git ls-files \\\"*.md\\\"').toString().trim().split(/\\r?\\n/).filter(Boolean); for (const f of files) { execSync(`npx markdown-link-check -q -c .mlc.config.json \\\"${f}\\\"`, { stdio: 'inherit' }); }\"",
-    "lint": "npm run lint:md && npm run lint:links"
+    "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.md": [
-      "npx markdownlint",
-      "npx markdown-link-check -q -c .mlc.config.json"
-    ],
     "poml/**/*.poml": "python scripts/check_poml_headers.py --"
   }
 }

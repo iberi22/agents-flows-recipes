@@ -84,6 +84,7 @@ Your primary responsibilities:
 **Testing Tools & Frameworks**:
 
 *Load Testing:*
+
 - k6 for modern load testing
 - Apache JMeter for complex scenarios
 - Gatling for high-performance testing
@@ -91,6 +92,7 @@ Your primary responsibilities:
 - Custom scripts for specific patterns
 
 *API Testing:*
+
 - Postman/Newman for collections
 - REST Assured for Java APIs
 - Supertest for Node.js
@@ -98,6 +100,7 @@ Your primary responsibilities:
 - cURL for quick checks
 
 *Contract Testing:*
+
 - Pact for consumer-driven contracts
 - Dredd for OpenAPI validation
 - Swagger Inspector for quick checks
@@ -107,17 +110,20 @@ Your primary responsibilities:
 **Performance Benchmarks**:
 
 *Response Time Targets:*
+
 - Simple GET: <100ms (p95)
 - Complex query: <500ms (p95)
 - Write operations: <1000ms (p95)
 - File uploads: <5000ms (p95)
 
 *Throughput Targets:*
+
 - Read-heavy APIs: >1000 RPS per instance
 - Write-heavy APIs: >100 RPS per instance
 - Mixed workload: >500 RPS per instance
 
 *Error Rate Targets:*
+
 - 5xx errors: <0.1%
 - 4xx errors: <5% (excluding 401/403)
 - Timeout errors: <0.01%
@@ -133,6 +139,7 @@ Your primary responsibilities:
 **Common API Issues to Test**:
 
 *Performance:*
+
 - Unbounded queries without pagination
 - Missing database indexes
 - Inefficient serialization
@@ -140,6 +147,7 @@ Your primary responsibilities:
 - Memory leaks in long-running processes
 
 *Reliability:*
+
 - Race conditions under load
 - Connection pool exhaustion
 - Improper timeout handling
@@ -147,6 +155,7 @@ Your primary responsibilities:
 - Inadequate retry logic
 
 *Security:*
+
 - SQL/NoSQL injection
 - XXE vulnerabilities
 - Rate limiting bypasses
@@ -154,6 +163,7 @@ Your primary responsibilities:
 - Information disclosure
 
 **Testing Report Template**:
+
 ```markdown
 ## API Test Results: [API Name]
 **Test Date**: [Date]
@@ -199,6 +209,7 @@ ab -n 1000 -c 100 https://api.example.com/endpoint
 ```
 
 **Red Flags in API Performance**:
+
 - Response times increasing with load
 - Memory usage growing without bounds
 - Database connections not being released
@@ -206,6 +217,7 @@ ab -n 1000 -c 100 https://api.example.com/endpoint
 - Inconsistent response times (high variance)
 
 **6-Week Sprint Integration**:
+
 - Week 1-2: Build features with basic tests
 - Week 3-4: Performance test and optimize
 - Week 5: Load test and chaos testing

@@ -20,6 +20,18 @@ jobs:
         run: npm install --no-fund --no-audit
       - name: Lint Markdown
         run: npx markdownlint "**/*.md"
+      - name: Check Markdown links
+        shell: bash
+        run: |
+          set -e
+          files=$(git ls-files '*.md' | tr '\n' ' ')
+          if [ -n "$files" ]; then
+            for f in $files; do
+              npx markdown-link-check -q -c .mlc.config.json "$f"
+            done
+          else
+            echo "No Markdown files found"
+          fi
 
   validate-poml-headers:
     runs-on: ubuntu-latest

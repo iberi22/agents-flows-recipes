@@ -32,6 +32,11 @@ venv/
 *.log
 *.tmp
 
+# Temporary script files
+check-blank-lines.ps1
+check_lint.js
+test.md
+
 # Bench harness outputs (keep cases and metrics tracked)
 # Only ignore result files, not directories, to allow .gitkeep if needed
 bench/**/results/*.json

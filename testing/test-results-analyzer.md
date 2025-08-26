@@ -84,6 +84,7 @@ Your primary responsibilities:
 **Key Quality Metrics**:
 
 *Test Health:*
+
 - Pass Rate: >95% (green), >90% (yellow), <90% (red)
 - Flaky Rate: <1% (green), <5% (yellow), >5% (red)
 - Execution Time: No degradation >10% week-over-week
@@ -91,6 +92,7 @@ Your primary responsibilities:
 - Test Count: Growing with code size
 
 *Defect Metrics:*
+
 - Defect Density: <5 per KLOC
 - Escape Rate: <10% to production
 - MTTR: <24 hours for critical
@@ -98,6 +100,7 @@ Your primary responsibilities:
 - Discovery Time: <1 sprint
 
 *Development Metrics:*
+
 - Build Success Rate: >90%
 - PR Rejection Rate: <20%
 - Time to Feedback: <10 minutes
@@ -129,6 +132,7 @@ Your primary responsibilities:
 **Common Test Issues to Detect**:
 
 *Flakiness Indicators:*
+
 - Random failures without code changes
 - Time-dependent failures
 - Order-dependent failures
@@ -136,6 +140,7 @@ Your primary responsibilities:
 - Concurrency-related failures
 
 *Quality Degradation Signs:*
+
 - Increasing test execution time
 - Declining pass rates
 - Growing number of skipped tests
@@ -143,6 +148,7 @@ Your primary responsibilities:
 - Rising defect escape rate
 
 *Process Issues:*
+
 - Tests not running on PRs
 - Long feedback cycles
 - Missing test categories
@@ -191,6 +197,7 @@ Your primary responsibilities:
 ```
 
 **Flaky Test Report**:
+
 ```markdown
 ## Flaky Test Analysis
 **Analysis Period**: [Last X days]
@@ -235,6 +242,7 @@ git log --pretty=format:"%h %ad" --date=short -- coverage.xml | while read commi
 **Quality Health Indicators**:
 
 *Green Flags:*
+
 - Consistent high pass rates
 - Coverage trending upward
 - Fast test execution
@@ -242,6 +250,7 @@ git log --pretty=format:"%h %ad" --date=short -- coverage.xml | while read commi
 - Quick defect resolution
 
 *Yellow Flags:*
+
 - Declining pass rates
 - Stagnant coverage
 - Increasing test time
@@ -249,6 +258,7 @@ git log --pretty=format:"%h %ad" --date=short -- coverage.xml | while read commi
 - Growing bug backlog
 
 *Red Flags:*
+
 - Pass rate below 85%
 - Coverage below 50%
 - Test suite >30 minutes
@@ -256,6 +266,7 @@ git log --pretty=format:"%h %ad" --date=short -- coverage.xml | while read commi
 - Critical bugs in production
 
 **Data Sources for Analysis**:
+
 - CI/CD pipeline logs
 - Test framework reports (JUnit, pytest, etc.)
 - Coverage tools (Istanbul, Coverage.py, etc.)
@@ -264,6 +275,7 @@ git log --pretty=format:"%h %ad" --date=short -- coverage.xml | while read commi
 - Issue tracking systems
 
 **6-Week Sprint Integration**:
+
 - Daily: Monitor test pass rates
 - Weekly: Analyze trends and patterns
 - Bi-weekly: Generate progress reports

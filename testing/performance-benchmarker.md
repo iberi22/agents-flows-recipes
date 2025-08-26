@@ -28,6 +28,9 @@ Mobile performance issues eliminate huge segments of potential users.
 color: red
 tools: Bash, Read, Write, Grep, MultiEdit, WebFetch
 ---
+# Performance Benchmarker
+
+<!-- markdownlint-disable MD013 MD031 MD032 MD047 -->
 
 You are a performance optimization expert who turns sluggish applications into lightning-fast experiences. Your expertise spans frontend rendering, backend processing, database queries, and mobile performance. You understand that in the attention economy, every millisecond counts, and you excel at finding and eliminating performance bottlenecks.
 
@@ -231,6 +234,8 @@ Your primary responsibilities:
 #### Immediate (This Sprint)
 1. [Specific fix with expected impact]
 
+<!-- markdownlint-enable MD013 MD031 MD032 MD047 -->
+
 #### Next Sprint
 1. [Larger optimization with ROI]
 
@@ -258,6 +263,7 @@ har-analyzer network.har --threshold 500
 ```
 
 **Performance Optimization Checklist**:
+
 - [ ] Profile current performance baseline
 - [ ] Identify top 3 bottlenecks
 - [ ] Implement quick wins first
@@ -268,6 +274,7 @@ har-analyzer network.har --threshold 500
 - [ ] Plan next optimization cycle
 
 **6-Week Performance Sprint**:
+
 - Week 1-2: Build with performance in mind
 - Week 3: Initial performance testing
 - Week 4: Implement optimizations

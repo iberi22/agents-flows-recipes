@@ -87,10 +87,10 @@ Place recipes under `poml/<department>/<agent>.poml`.
 1) Clone the repo
 
 ```bash
-git clone https://github.com/contains-studio/agents-flows-recipes.git
+git clone https://github.com/iberi22/agents-flows-recipes.git
 ```
 
-2) Run a benchmark with a POML recipe
+1) Run a benchmark with a POML recipe
 
 ```bash
 python scripts/bench-run.py \
@@ -101,7 +101,7 @@ python scripts/bench-run.py \
   --model gpt-5
 ```
 
-3) Results are written to `bench/<task>/results/*.json`. Pin metrics in `recipes.lock.json` per release.
+1) Results are written to `bench/<task>/results/*.json`. Pin metrics in `recipes.lock.json` per release.
 
 ### Migration: Convert Markdown to POML
 
@@ -255,7 +255,8 @@ Each agent includes in `.poml`:
   - Dry-run friendly. Parses `.poml` `<let>` and legacy `.md` frontmatter.
   - Example: `python scripts/bench-run.py --task sample-task --cases all --recipe poml/engineering/ai-engineer.poml --provider openai --model gpt-5`.
 - **Lockfile (`recipes.lock.json`):**
-  - Pin `release.sha` and `release.date` plus `metrics[bench_id][provider][model].variants[*]` with `accuracy`, `avg_latency_ms`, `tool_calls`.
+  - Pin `release.sha` and `release.date` plus `metrics[bench_id][provider][model].variants[*]`
+    with `accuracy`, `avg_latency_ms`, `tool_calls`.
   - Update flow: run bench → copy metrics → bump date (local: 2025-08-24) and current `git rev-parse HEAD`.
 - **Multi-provider variants:**
   - OpenAI: `gpt-5`
@@ -464,7 +465,7 @@ Use this checklist when creating or modifying agents for your specific needs:
 
 Referencias:
 
-- OpenAI: [Function calling](https://platform.openai.com/docs/guides/function-calling)
+- OpenAI: [Function calling](https://platform.openai.com/docs/guides/function-calling?api-mode=responses)
 - Gemini: [Function calling](https://ai.google.dev/gemini-api/docs/function-calling)
 - LLM Settings (temperatura): [PromptingGuide – LLM Settings](https://www.promptingguide.ai/introduction/settings)
 - Qwen/QwenCoder: [Tools and function calling](https://github.com/QwenLM/qwen-code/tree/main/docs/tools)
